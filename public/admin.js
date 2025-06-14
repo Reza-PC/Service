@@ -1,5 +1,6 @@
 ﻿async function loadBookings() {
-  const res = await fetch(`/api/bookings`);
+  const API_BASE = "https://service-jnkf.onrender.com";
+  const res = await fetch(`${API_BASE}/api/bookings`);
   const bookings = await res.json();
   const grouped = {};
 
@@ -25,7 +26,7 @@
 }
 
 async function archiveBooking(id) {
-  await fetch(`/api/archive/${id}`, { method: "POST" });
+  await fetch(`${API_BASE}/api/archive/${id}`, { method: "POST" });
   loadBookings();
 }
 

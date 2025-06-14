@@ -1,39 +1,61 @@
-﻿<!DOCTYPE html>
-<html lang="fa">
-<head>
-  <meta charset="UTF-8" />
-  <title>بایگانی نوبت‌ها</title>
-  <link rel="stylesheet" href="style-archive.css" />
-</head>
-<body>
-  <div class="container">
-    <h1>نوبت‌های بایگانی‌شده</h1>
-    <div id="archiveList"></div>
-    <a href="admin.html" class="login-button">بازگشت به مدیریت</a>
-  </div>
+/* استایل اختصاصی صفحه بایگانی */
+/* پیشوند ar- برای جلوگیری از تداخل */
 
-  <script>
-    fetch("/api/archive")
-      .then(res => res.json())
-      .then(bookings => {
-        const grouped = {};
-        bookings.forEach(b => {
-          if (!grouped[b.weekday]) grouped[b.weekday] = [];
-          grouped[b.weekday].push(b);
-        });
+.ar-container {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  font-family: 'Vazir', Tahoma, sans-serif;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  direction: rtl;
+  color: #333;
+}
 
-        const container = document.getElementById("archiveList");
-        Object.keys(grouped).forEach(day => {
-          const section = document.createElement("div");
-          section.innerHTML = `<h2>${day}</h2>`;
-          grouped[day].forEach(b => {
-            const row = document.createElement("div");
-            row.textContent = `${b.hour} - ${b.name} - ${b.phone} - ${b.service}`;
-            section.appendChild(row);
-          });
-          container.appendChild(section);
-        });
-      });
-  </script>
-</body>
-</html>
+.ar-container h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #2c3e50;
+  font-weight: 700;
+  font-size: 28px;
+}
+
+.ar-card {
+  background: #fff;
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+  transition: box-shadow 0.3s ease;
+}
+
+.ar-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.ar-card strong {
+  color: #2980b9;
+  font-size: 18px;
+}
+
+.ar-card br {
+  line-height: 1.6;
+}
+#clear-archive-btn {
+      background-color: #d32f2f;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-bottom: 20px;
+      transition: background-color 0.3s ease;
+      display: block;
+      width: 100%;
+      text-align: center;
+}
+#clear-archive-btn:hover {
+      background-color: #9a0000;
+}

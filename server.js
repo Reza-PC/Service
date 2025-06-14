@@ -21,7 +21,7 @@ db.run(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,
     phone TEXT,
-    address TEXT
+    address TEXT,
     service TEXT,
     weekday TEXT,
     hour TEXT,

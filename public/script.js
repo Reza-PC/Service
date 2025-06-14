@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const bookingForm = document.getElementById("bookingForm");
   const weekdaySelect = document.getElementById("weekday");
   const hourSelect = document.getElementById("time");
-
+  const API_BASE = "https://service-jnkf.onrender.com";
   // هر بار که روز هفته تغییر کرد، ساعت‌های رزرو شده را دریافت کن و غیر فعال کن
   weekdaySelect.addEventListener("change", async () => {
     const selectedDay = weekdaySelect.value;
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const res = await fetch(`http://localhost:3000/api/booked-hours?weekday=${encodeURIComponent(selectedDay)}`);
+      const res = await fetch(`${API_BASE}/api/booked-hours?weekday=${encodeURIComponent(selectedDay)}`);
       if (!res.ok) throw new Error("خطا در دریافت ساعت‌های رزرو شده");
 
       const bookedHours = await res.json();

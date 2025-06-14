@@ -51,8 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const data = {
       name: document.getElementById("name").value.trim(),
-      phone: document.getElementById("phone").value.trim(),
-      address: document.getElementById("address").value.trim(),
+      phone: document.getElementById("phone").value.trim() || "ندارد",
+      address: document.getElementById("address").value.trim() || "ندارد",
       service: document.getElementById("service").value.trim(),
       weekday: weekdaySelect.value,
       hour: hourSelect.value,

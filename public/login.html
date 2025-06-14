@@ -6,7 +6,6 @@
   <title>ورود سرویسکار</title>
   <style>
     @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css');
-
     body {
       margin: 0;
       background: #f0f4f8;
@@ -74,7 +73,7 @@
 <body>
   <div class="login-container">
     <h2>ورود</h2>
-    <form action="/login" method="POST" autocomplete="off">
+    <form id="login-form" autocomplete="off">
       <label for="username">نام کاربری:</label>
       <input type="text" id="username" name="username" required />
 
@@ -84,5 +83,25 @@
       <button type="submit">ورود</button>
     </form>
   </div>
+
+  <script>
+    document.getElementById("login-form").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
+
+      if (res.ok) {
+        window.location.href = "admin.html";
+      } else {
+        alert("نام کاربری یا رمز عبور اشتباه است");
+      }
+    });
+  </script>
 </body>
 </html>

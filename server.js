@@ -98,3 +98,16 @@ app.post("/api/login", (req, res) => {
   }
 });
 
+// دریافت ساعت‌های پر شده برای یک روز خاص
+app.get("/api/booked-hours", (req, res) => {
+  const { weekday } = req.query;
+  if (!weekday) return res.status(400).send({ error: "پارامتر weekday الزامی است" });
+
+  const query = `SELECT hour FROM bookings WHERE status = 'active' AND weekday = ?`;
+  db.all(query, [weekday], (err, rows) => {
+    if (err) return res.status(500).send({ error: err.message });
+
+    const bookedHours = rows.map(row => row.hour);
+    res.send(bookedHours);
+  });
+});

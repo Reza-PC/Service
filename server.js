@@ -106,6 +106,18 @@ app.get("/api/archive", (req, res) => {
   });
 });
 
+// حذف همه نوبت‌های آرشیو شده
+app.delete("/api/archive", (req, res) => {
+  db.run(`DELETE FROM bookings WHERE status = 'archived'`, function(err) {
+    if (err) {
+      console.error("خطا در حذف آرشیو:", err.message);
+      return res.status(500).send({ error: err.message });
+    }
+    res.send({ success: true, deletedCount: this.changes });
+  });
+});
+
+
 // ** اضافه کردن روت برای گرفتن ساعت‌های رزرو شده در یک روز مشخص **
 app.get("/api/booked-hours", (req, res) => {
   const { weekday } = req.query;

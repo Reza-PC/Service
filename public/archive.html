@@ -15,7 +15,8 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-  fetch('/api/archives')
+  const API_BASE = "https://your-render-api-url.onrender.com";
+  fetch(`${API_BASE}/api/archives`)
     .then(res => res.json())
     .then(archived => {
       const grouped = {};
@@ -49,7 +50,7 @@
 
   document.getElementById("clear-archive-btn").onclick = () => {
     if (confirm("همه نوبت‌های بایگانی‌شده حذف شوند؟")) {
-      fetch('/api/archives', { method: 'DELETE' })
+      fetch(`${API_BASE}/api/archives`, { method: 'DELETE' })
         .then(() => location.reload());
     }
   };

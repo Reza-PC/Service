@@ -73,7 +73,7 @@ app.post("/api/book", (req, res) => {
       return res.status(409).send({ error: "این ساعت در این روز قبلاً رزرو شده است." });
     }
 
-    const insertQuery = `INSERT INTO bookings (name, phone, service, weekday, hour) VALUES (?, ?, ?, ?, ?)`;
+    const insertQuery = `INSERT INTO bookings (name, phone, address, service, weekday, hour) VALUES (?, ?, ?, ?, ?, ?)`;
     db.run(insertQuery, [name, phone, address, service, weekday, hour], function (err) {
       if (err) return res.status(500).send({ error: err.message });
       res.send({ id: this.lastID });

@@ -1,5 +1,5 @@
 // آدرس API اگر پروژه روی همان سرور است، خالی بگذار
-const API_BASE = ""; 
+const API_BASE = "https://service-jnkf.onrender.com";
 
 // بارگذاری نوبت‌ها از سرور
 async function loadBookings() {

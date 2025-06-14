@@ -17,14 +17,26 @@ async function loadBookings() {
     const container = document.getElementById("bookingList");
     container.innerHTML = "";
 
-    Object.keys(grouped).forEach(day => {
+    const daysOrder = ["شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "نامشخص"];
+
+    daysOrder.forEach(day => {
+      if (!grouped[day]) return;
+
       const section = document.createElement("div");
+      section.className = "day-section";
       section.innerHTML = `<h2>${day}</h2>`;
 
-      grouped[day].forEach(b => {
+      grouped[day].sort((a, b) => a.hour.localeCompare(b.hour)).forEach(b => {
         const row = document.createElement("div");
+        row.className = "booking-row";
         row.innerHTML = `
-          <span><strong>${b.hour}</strong> - ${b.name} - ${b.phone} - ${b.service} - ${b.address}</span>
+          <span>
+            <strong>${b.hour}</strong> -
+            ${b.name || "نامشخص"} -
+            ${b.phone || "بدون شماره"} -
+            ${b.service || "خدمت نامشخص"} -
+            ${b.address || "آدرس ثبت نشده"}
+          </span>
           <button onclick="archiveBooking(${b.id})">بایگانی</button>
         `;
         section.appendChild(row);
@@ -34,7 +46,7 @@ async function loadBookings() {
     });
 
   } catch (err) {
-    console.error("خطا در دریافت نوبت‌ها:", err);
+    console.error("❌ خطا در دریافت نوبت‌ها:", err);
   }
 }
 
@@ -47,11 +59,11 @@ async function archiveBooking(id) {
     if (res.ok) {
       loadBookings();
     } else {
-      alert("خطا در بایگانی نوبت");
+      alert("⚠️ خطا در بایگانی نوبت");
     }
   } catch (err) {
-    console.error("خطا در بایگانی:", err);
-    alert("خطا در ارتباط با سرور");
+    console.error("❌ خطا در بایگانی:", err);
+    alert("❌ خطا در ارتباط با سرور");
   }
 }
 

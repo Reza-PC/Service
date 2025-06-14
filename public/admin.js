@@ -1,5 +1,5 @@
 ﻿async function loadBookings() {
-  const res = await fetch(`${API_BASE}/api/bookings`);
+  const res = await fetch(`/api/bookings`);
   const bookings = await res.json();
   const grouped = {};
 

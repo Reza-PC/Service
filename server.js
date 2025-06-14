@@ -82,3 +82,19 @@ app.get("/api/archive", (req, res) => {
 app.listen(port, () => {
   console.log(`✅ Server running on http://localhost:${port}`);
 });
+
+// مسیر ورود سرویسکار
+app.post("/api/login", (req, res) => {
+  const { username, password } = req.body;
+
+  // مقادیر پیش‌فرض (می‌تونی بعداً دیتابیس‌محورش کنی)
+  const validUser = "admin"
+  const validPass = "5442";
+
+  if (username === validUser && password === validPass) {
+    res.send({ success: true });
+  } else {
+    res.status(401).send({ error: "نام کاربری یا رمز عبور نادرست است" });
+  }
+});
+

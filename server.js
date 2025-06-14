@@ -63,7 +63,7 @@ db.run(`
 
 // ثبت نوبت جدید
 app.post("/api/book", (req, res) => {
-  const { name, phone, service, weekday, hour } = req.body;
+  const { name, phone, address, service, weekday, hour } = req.body;
 
   // چک می‌کنیم آیا این ساعت در این روز قبلاً رزرو شده؟
   const checkQuery = `SELECT COUNT(*) as count FROM bookings WHERE weekday = ? AND hour = ? AND status = 'active'`;
@@ -74,7 +74,7 @@ app.post("/api/book", (req, res) => {
     }
 
     const insertQuery = `INSERT INTO bookings (name, phone, service, weekday, hour) VALUES (?, ?, ?, ?, ?)`;
-    db.run(insertQuery, [name, phone, service, weekday, hour], function (err) {
+    db.run(insertQuery, [name, phone, address, service, weekday, hour], function (err) {
       if (err) return res.status(500).send({ error: err.message });
       res.send({ id: this.lastID });
     });

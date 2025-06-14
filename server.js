@@ -35,21 +35,25 @@ db.run(`
     username TEXT UNIQUE,
     password TEXT
   )
-`);
-
-// افزودن کاربر پیش‌فرض اگر وجود نداشته باشد
-const defaultUsername = "admin";
-const defaultPassword = "5442"; // می‌تونی رمز قوی‌تری بذاری
-
-db.get("SELECT * FROM users WHERE username = ?", [defaultUsername], (err, row) => {
+`, (err) => {
   if (err) {
-    console.error("خطا در بررسی کاربر پیش‌فرض:", err.message);
-  } else if (!row) {
-    db.run("INSERT INTO users (username, password) VALUES (?, ?)", [defaultUsername, defaultPassword], (err) => {
+    console.error("خطا در ساخت جدول کاربران:", err.message);
+  } else {
+    // فقط بعد از ساخت موفق جدول بررسی کن که کاربر پیش‌فرض وجود داره یا نه
+    const defaultUsername = "admin";
+    const defaultPassword = "123456";
+
+    db.get("SELECT * FROM users WHERE username = ?", [defaultUsername], (err, row) => {
       if (err) {
-        console.error("خطا در ساخت کاربر پیش‌فرض:", err.message);
-      } else {
-        console.log("✅ کاربر پیش‌فرض ساخته شد.");
+        console.error("خطا در بررسی کاربر پیش‌فرض:", err.message);
+      } else if (!row) {
+        db.run("INSERT INTO users (username, password) VALUES (?, ?)", [defaultUsername, defaultPassword], (err) => {
+          if (err) {
+            console.error("خطا در ساخت کاربر پیش‌فرض:", err.message);
+          } else {
+            console.log("✅ کاربر پیش‌فرض ساخته شد.");
+          }
+        });
       }
     });
   }

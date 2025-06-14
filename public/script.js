@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const res = await fetch(`/api/booked-hours?weekday=${encodeURIComponent(selectedDay)}`);
+      const res = await fetch(`http://localhost:3000/api/booked-hours?weekday=${encodeURIComponent(selectedDay)}`);
       if (!res.ok) throw new Error("خطا در دریافت ساعت‌های رزرو شده");
 
       const bookedHours = await res.json();

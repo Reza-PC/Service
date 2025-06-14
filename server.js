@@ -41,7 +41,7 @@ db.run(`
   } else {
     // فقط بعد از ساخت موفق جدول بررسی کن که کاربر پیش‌فرض وجود داره یا نه
     const defaultUsername = "admin";
-    const defaultPassword = "123456";
+    const defaultPassword = "5442";
 
     db.get("SELECT * FROM users WHERE username = ?", [defaultUsername], (err, row) => {
       if (err) {

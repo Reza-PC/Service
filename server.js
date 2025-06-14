@@ -28,6 +28,34 @@ db.run(`
   )
 `);
 
+// ایجاد جدول کاربران اگر وجود ندارد
+db.run(`
+  CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE,
+    password TEXT
+  )
+`);
+
+// افزودن کاربر پیش‌فرض اگر وجود نداشته باشد
+const defaultUsername = "admin";
+const defaultPassword = "5442"; // می‌تونی رمز قوی‌تری بذاری
+
+db.get("SELECT * FROM users WHERE username = ?", [defaultUsername], (err, row) => {
+  if (err) {
+    console.error("خطا در بررسی کاربر پیش‌فرض:", err.message);
+  } else if (!row) {
+    db.run("INSERT INTO users (username, password) VALUES (?, ?)", [defaultUsername, defaultPassword], (err) => {
+      if (err) {
+        console.error("خطا در ساخت کاربر پیش‌فرض:", err.message);
+      } else {
+        console.log("✅ کاربر پیش‌فرض ساخته شد.");
+      }
+    });
+  }
+});
+
+
 // ثبت نوبت جدید
 app.post("/api/book", (req, res) => {
   const { name, phone, service, weekday, hour } = req.body;
@@ -87,6 +115,25 @@ app.get("/api/booked-hours", (req, res) => {
     res.send(bookedHours);
   });
 });
+
+// API ورود کاربر
+app.post("/api/login", (req, res) => {
+  const { username, password } = req.body;
+
+  db.get("SELECT * FROM users WHERE username = ? AND password = ?", [username, password], (err, user) => {
+    if (err) {
+      return res.status(500).send({ error: "خطا در ورود" });
+    }
+
+    if (!user) {
+      return res.status(401).send({ error: "نام کاربری یا رمز عبور اشتباه است" });
+    }
+
+    res.send({ success: true });
+  });
+});
+
+
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

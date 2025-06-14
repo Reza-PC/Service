@@ -48,13 +48,34 @@
       });
     });
 
-  document.getElementById("clear-archive-btn").onclick = () => {
+  document.getElementById("").onclick = () => {
     if (confirm("همه نوبت‌های بایگانی‌شده حذف شوند؟")) {
       fetch(`${API_BASE}/api/archive`, { method: 'DELETE' })
         .then(() => location.reload());
     }
   };
 });
+
+  document.getElementById("clear-archive-btn").addEventListener("click", async () => {
+  if (!confirm("آیا مطمئنید می‌خواهید همه نوبت‌های بایگانی شده را حذف کنید؟")) return;
+
+  try {
+    const res = await fetch(`${API_BASE}https://service-jnkf.onrender.com/api/archive`, {
+      method: "DELETE"
+    });
+
+    if (res.ok) {
+      alert("همه نوبت‌های بایگانی شده حذف شدند.");
+      // رفرش کردن لیست آرشیو بعد حذف
+      loadArchiveList(); // فرض بر وجود تابعی که آرشیو را لود می‌کند
+    } else {
+      alert("خطا در حذف نوبت‌ها");
+    }
+  } catch {
+    alert("خطا در ارتباط با سرور");
+  }
+});
+
 
   </script>
 </body>

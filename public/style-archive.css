@@ -1,66 +1,108 @@
 .ar-container {
-  max-width: 850px;
-  margin: 35px auto;
-  padding: 25px 30px;
-  background: #e0f2f1;
-  border-radius: 14px;
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
   font-family: 'Vazir', Tahoma, sans-serif;
-  box-shadow: 0 8px 22px rgba(0,0,0,0.15);
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
   direction: rtl;
-  color: #004d40;
+  color: #333;
 }
 
 .ar-container h1 {
   text-align: center;
-  margin-bottom: 30px;
-  color: #00796b;
-  font-weight: 800;
-  font-size: 2.8rem;
-  letter-spacing: 1.5px;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  margin-bottom: 25px;
+  color: #2c3e50;
+  font-weight: 700;
+  font-size: 28px;
 }
 
 .ar-card {
-  background: #ffffff;
-  padding: 20px 28px;
-  margin-bottom: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  transition: box-shadow 0.35s ease, transform 0.35s ease;
+  background: #fff;
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+  transition: box-shadow 0.3s ease;
 }
 
 .ar-card:hover {
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  transform: translateY(-6px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .ar-card strong {
-  color: #00796b;
-  font-size: 19px;
-  font-weight: 700;
+  color: #2980b9;
+  font-size: 18px;
 }
 
 .ar-card br {
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
 #clear-archive-btn {
   background-color: #d32f2f;
   color: white;
   border: none;
-  padding: 15px 0;
-  border-radius: 12px;
+  padding: 12px 20px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 30px;
-  transition: background-color 0.4s ease, box-shadow 0.3s ease;
+  font-size: 16px;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease;
+  display: block;
   width: 100%;
   text-align: center;
-  box-shadow: 0 6px 16px rgba(211, 47, 47, 0.6);
 }
 
 #clear-archive-btn:hover {
   background-color: #9a0000;
-  box-shadow: 0 8px 24px rgba(154, 0, 0, 0.8);
+}
+
+/* ریسپانسیو */
+@media (max-width: 768px) {
+  .ar-container {
+    padding: 15px;
+  }
+
+  .ar-container h1 {
+    font-size: 24px;
+  }
+
+  .ar-card {
+    padding: 12px 15px;
+  }
+
+  .ar-card strong {
+    font-size: 16px;
+  }
+
+  #clear-archive-btn {
+    padding: 10px 15px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ar-container {
+    margin: 15px 10px;
+    padding: 10px;
+  }
+
+  .ar-container h1 {
+    font-size: 20px;
+  }
+
+  .ar-card {
+    padding: 10px 12px;
+  }
+
+  .ar-card strong {
+    font-size: 14px;
+  }
+
+  #clear-archive-btn {
+    padding: 10px 10px;
+    font-size: 14px;
+  }
 }

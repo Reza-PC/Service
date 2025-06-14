@@ -66,10 +66,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const res = await fetch(`${API_BASE}/api/book`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
 
       if (res.ok) {
         alert("نوبت با موفقیت ثبت شد");

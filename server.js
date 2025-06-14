@@ -20,7 +20,6 @@ db.run(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,
     phone TEXT,
-    address TEXT,
     service TEXT,
     weekday TEXT,
     hour TEXT,
@@ -30,31 +29,25 @@ db.run(`
 
 // ثبت نوبت جدید
 app.post("/api/book", (req, res) => {
-  const { name, phone, address, service, weekday, hour } = req.body;
+  const { name, phone, service, weekday, hour } = req.body;
 
-  if (!name || !phone || !address || !service || !weekday || !hour) {
-    return res.status(400).send({ error: "تمامی فیلدها الزامی هستند" });
-  }
-
-  // بررسی تکراری نبودن نام یا آدرس
-  const checkQuery = `SELECT * FROM bookings WHERE (name = ? OR address = ?) AND status = 'active'`;
-  db.get(checkQuery, [name, address], (err, row) => {
+  // چک می‌کنیم آیا این ساعت در این روز قبلاً رزرو شده؟
+  const checkQuery = `SELECT COUNT(*) as count FROM bookings WHERE weekday = ? AND hour = ? AND status = 'active'`;
+  db.get(checkQuery, [weekday, hour], (err, row) => {
     if (err) return res.status(500).send({ error: err.message });
-
-    if (row) {
-      return res.status(409).send({ error: "کاربر قبلاً نوبت ثبت کرده است" });
+    if (row.count > 0) {
+      return res.status(409).send({ error: "این ساعت در این روز قبلاً رزرو شده است." });
     }
 
-    // ثبت در پایگاه داده
-    const insertQuery = `INSERT INTO bookings (name, phone, address, service, weekday, hour) VALUES (?, ?, ?, ?, ?, ?)`;
-    db.run(insertQuery, [name, phone, address, service, weekday, hour], function (err) {
+    const insertQuery = `INSERT INTO bookings (name, phone, service, weekday, hour) VALUES (?, ?, ?, ?, ?)`;
+    db.run(insertQuery, [name, phone, service, weekday, hour], function (err) {
       if (err) return res.status(500).send({ error: err.message });
       res.send({ id: this.lastID });
     });
   });
 });
 
-// دریافت نوبت‌های فعال
+// گرفتن همه رزروهای فعال (برای مدیریت)
 app.get("/api/bookings", (req, res) => {
   db.all(`SELECT * FROM bookings WHERE status = 'active' ORDER BY weekday, hour`, [], (err, rows) => {
     if (err) return res.status(500).send({ error: err.message });
@@ -62,7 +55,7 @@ app.get("/api/bookings", (req, res) => {
   });
 });
 
-// آرشیو کردن نوبت
+// آرشیو کردن رزرو
 app.post("/api/archive/:id", (req, res) => {
   const id = req.params.id;
   db.run(`UPDATE bookings SET status = 'archived' WHERE id = ?`, [id], function (err) {
@@ -71,7 +64,7 @@ app.post("/api/archive/:id", (req, res) => {
   });
 });
 
-// دریافت نوبت‌های آرشیوی
+// گرفتن آرشیو رزروها
 app.get("/api/archive", (req, res) => {
   db.all(`SELECT * FROM bookings WHERE status = 'archived' ORDER BY weekday, hour`, [], (err, rows) => {
     if (err) return res.status(500).send({ error: err.message });
@@ -79,35 +72,21 @@ app.get("/api/archive", (req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`✅ Server running on http://localhost:${port}`);
-});
-
-// مسیر ورود سرویسکار
-app.post("/api/login", (req, res) => {
-  const { username, password } = req.body;
-
-  // مقادیر پیش‌فرض (می‌تونی بعداً دیتابیس‌محورش کنی)
-  const validUser = "admin"
-  const validPass = "5442";
-
-  if (username === validUser && password === validPass) {
-    res.send({ success: true });
-  } else {
-    res.status(401).send({ error: "نام کاربری یا رمز عبور نادرست است" });
-  }
-});
-
-// دریافت ساعت‌های پر شده برای یک روز خاص
+// ** اضافه کردن روت برای گرفتن ساعت‌های رزرو شده در یک روز مشخص **
 app.get("/api/booked-hours", (req, res) => {
   const { weekday } = req.query;
-  if (!weekday) return res.status(400).send({ error: "پارامتر weekday الزامی است" });
+  if (!weekday) return res.status(400).send({ error: "پارامتر weekday الزامی است." });
 
-  const query = `SELECT hour FROM bookings WHERE status = 'active' AND weekday = ?`;
+  const query = `SELECT hour FROM bookings WHERE weekday = ? AND status = 'active'`;
   db.all(query, [weekday], (err, rows) => {
     if (err) return res.status(500).send({ error: err.message });
 
+    // استخراج ساعت‌ها به صورت آرایه
     const bookedHours = rows.map(row => row.hour);
     res.send(bookedHours);
   });
+});
+
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
 });

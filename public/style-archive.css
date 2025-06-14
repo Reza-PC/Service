@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <title>بایگانی نوبت‌ها</title>
+  <link rel="stylesheet" href="style-archive.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>نوبت‌های بایگانی‌شده</h1>
+    <div id="archiveList"></div>
+    <a href="admin.html" class="login-button">بازگشت به مدیریت</a>
+  </div>
+
+  <script>
+    fetch("/api/archive")
+      .then(res => res.json())
+      .then(bookings => {
+        const grouped = {};
+        bookings.forEach(b => {
+          if (!grouped[b.weekday]) grouped[b.weekday] = [];
+          grouped[b.weekday].push(b);
+        });
+
+        const container = document.getElementById("archiveList");
+        Object.keys(grouped).forEach(day => {
+          const section = document.createElement("div");
+          section.innerHTML = `<h2>${day}</h2>`;
+          grouped[day].forEach(b => {
+            const row = document.createElement("div");
+            row.textContent = `${b.hour} - ${b.name} - ${b.phone} - ${b.service}`;
+            section.appendChild(row);
+          });
+          container.appendChild(section);
+        });
+      });
+  </script>
+</body>
+</html>

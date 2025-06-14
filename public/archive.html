@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>بایگانی نوبت‌ها</title>
+  <link rel="stylesheet" href="style-archive.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>نوبت‌های بایگانی‌شده</h1>
+    <button id="clear-archive-btn">حذف همه نوبت‌های بایگانی‌شده</button>
+    <div id="archive-container"></div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+  fetch('/api/archives')
+    .then(res => res.json())
+    .then(archived => {
+      const grouped = {};
+      archived.forEach(c => {
+        const day = c.weekday || "نامشخص";
+        if (!grouped[day]) grouped[day] = [];
+        grouped[day].push(c);
+      });
+
+      const container = document.getElementById("archive-container");
+      const daysOrder = ["شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "نامشخص"];
+      daysOrder.forEach(day => {
+        if (!grouped[day]) return;
+        const section = document.createElement("div");
+        section.className = "ar-section";
+        section.innerHTML = `<h2>${day}</h2>`;
+        grouped[day].sort((a, b) => a.time.localeCompare(b.time)).forEach(c => {
+          const div = document.createElement("div");
+          div.className = "ar-card";
+          div.innerHTML = `
+            <strong>${c.name}</strong> - ${c.phone}<br>
+            آدرس: ${c.address}<br>
+            ساعت: ${c.time}<br>
+            خدمات: ${c.service}
+          `;
+          section.appendChild(div);
+        });
+        container.appendChild(section);
+      });
+    });
+
+  document.getElementById("clear-archive-btn").onclick = () => {
+    if (confirm("همه نوبت‌های بایگانی‌شده حذف شوند؟")) {
+      fetch('/api/archives', { method: 'DELETE' })
+        .then(() => location.reload());
+    }
+  };
+});
+
+  </script>
+</body>
+</html>

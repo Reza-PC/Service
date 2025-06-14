@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <title>رزرو نوبت</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>فرم رزرو نوبت</h1>
+    <form id="bookingForm">
+      <input type="text" id="name" placeholder="نام کامل" required />
+      <input type="tel" id="phone" placeholder="شماره تماس" required />
+      <input type="text" id="service" placeholder="نوع خدمات" required />
+      <select id="weekday" required>
+        <option value="">انتخاب روز هفته</option>
+        <option value="شنبه">شنبه</option>
+        <option value="یک‌شنبه">یک‌شنبه</option>
+        <option value="دوشنبه">دوشنبه</option>
+        <option value="سه‌شنبه">سه‌شنبه</option>
+        <option value="چهارشنبه">چهارشنبه</option>
+        <option value="پنج‌شنبه">پنج‌شنبه</option>
+      </select>
+      <input type="time" id="hour" required />
+      <button type="submit">ثبت نوبت</button>
+    </form>
+
+    <a href="admin.html" class="login-button">ورود به مدیریت</a>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

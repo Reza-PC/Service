@@ -11,7 +11,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-const dbPath = "/mnt/data/database.db";
+const dbPath = "data/database.db";
 const db = new sqlite3.Database(dbPath);
 
 

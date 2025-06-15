@@ -1,34 +1,28 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const sqlite3 = require("sqlite3").verbose();
-const path = require("path");
-
+const express = require('express');
+const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors());
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
-const dbPath = path.join(__dirname, "data", "database.db");
-const db = new sqlite3.Database(dbPath);
+const dbPath = path.join(__dirname, 'data', 'database.db');
+const db = new sqlite3.Database(dbPath, (err) => {
+  if (err) return console.error('Database error:', err.message);
+  console.log('✅ SQLite database connected.');
+});
 
+db.run(`CREATE TABLE IF NOT EXISTS appointments (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT,
+  phone TEXT,
+  service TEXT,
+  day TEXT,
+  time TEXT,
+  status TEXT DEFAULT 'active'
+)`);
 
-// ساخت جدول در صورت عدم وجود
-db.run(`
-  CREATE TABLE IF NOT EXISTS bookings (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT,
-    phone TEXT,
-    address TEXT,
-    service TEXT,
-    weekday TEXT,
-    hour TEXT,
-    status TEXT DEFAULT 'active'
-  )
-`);
-
-// ایجاد جدول کاربران اگر وجود ندارد
 db.run(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -59,6 +53,24 @@ db.run(`
   }
 });
 
+app.post('/api/appointments', (req, res) => {
+  const { name, phone, service, day, time } = req.body;
+  db.run(
+    `INSERT INTO appointments (name, phone, service, day, time) VALUES (?, ?, ?, ?, ?)`,
+    [name, phone, service, day, time],
+    function (err) {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ id: this.lastID });
+    }
+  );
+});
+
+app.get('/api/appointments', (req, res) => {
+  db.all(`SELECT * FROM appointments WHERE status='active'`, [], (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows);
+  });
+});
 
 // ثبت نوبت جدید
 app.post("/api/book", (req, res) => {
@@ -88,20 +100,19 @@ app.get("/api/bookings", (req, res) => {
   });
 });
 
-// آرشیو کردن رزرو
-app.post("/api/archive/:id", (req, res) => {
+
+app.post('/api/archive/:id', (req, res) => {
   const id = req.params.id;
-  db.run(`UPDATE bookings SET status = 'archived' WHERE id = ?`, [id], function (err) {
-    if (err) return res.status(500).send({ error: err.message });
-    res.send({ success: true });
+  db.run(`UPDATE appointments SET status='archived' WHERE id = ?`, [id], function (err) {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ success: true });
   });
 });
 
-// گرفتن آرشیو رزروها
-app.get("/api/archive", (req, res) => {
-  db.all(`SELECT * FROM bookings WHERE status = 'archived' ORDER BY weekday, hour`, [], (err, rows) => {
-    if (err) return res.status(500).send({ error: err.message });
-    res.send(rows);
+app.get('/api/archived', (req, res) => {
+  db.all(`SELECT * FROM appointments WHERE status='archived'`, [], (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows);
   });
 });
 
@@ -150,7 +161,6 @@ app.post("/api/login", (req, res) => {
 });
 
 
-
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`🚀 Server running on port ${port}`);
 });

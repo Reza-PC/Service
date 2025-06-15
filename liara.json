@@ -1,0 +1,12 @@
+{
+  "platform": "node",
+  "app": {
+    "read-only": false
+  },
+  "disks": [
+    {
+      "name": "my-database-disk",
+      "mountPath": "/data"
+    }
+  ]
+}

@@ -1,8 +1,6 @@
 {
   "platform": "node",
-  "app": {
-    "read-only": false
-  },
+  "app": "service"
   "disks": [
     {
       "name": "my-database-disk",

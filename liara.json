@@ -9,7 +9,7 @@
   [
     {
       "name":"my-database-disk"
-      "mountTo":"path/to/folder"
+      "mountTo":"/data"
     }
   ]
 }

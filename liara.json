@@ -1,10 +1,15 @@
 {
-  "platform": "node",
-  "app": "service"
-  "disks": [
+  "app":"service"
+  "port":3000
+  "build":
+  {
+    "location":"iran"
+  }
+  "disks":
+  [
     {
-      "name": "my-database-disk",
-      "mountPath": "/data"
+      "name":"my-database-disk"
+      "mountTo":"path/to/folder"
     }
   ]
 }

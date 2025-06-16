@@ -34,8 +34,8 @@ db.run(`
     console.error("خطا در ساخت جدول کاربران:", err.message);
   } else {
     // فقط بعد از ساخت موفق جدول بررسی کن که کاربر پیش‌فرض وجود داره یا نه
-    const defaultUsername = "admin";
-    const defaultPassword = "5442";
+    const defaultUsername = "";
+    const defaultPassword = "";
 
     db.get("SELECT * FROM users WHERE username = ?", [defaultUsername], (err, row) => {
       if (err) {
